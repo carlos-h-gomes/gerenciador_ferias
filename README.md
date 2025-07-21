@@ -19,7 +19,7 @@ Sistema web desenvolvido com Flask para facilitar o planejamento e controle de f
 ### 📊 Dashboard Analítico
 Painel com totais de férias/folgas, filtros por time e gráficos de capacidade:
 
-<img width="1559" height="1135" alt="print_ferias_dashboard" src="https://github.com/user-attachments/assets/5d003c71-090f-4ace-b22a-be8c58ed2149" />
+<img width="1559" height="1135" alt="print_ferias_dashboard" src="https://github.com/user-attachments/assets/795736ec-6031-4aad-b3d4-05113fa7a0d5" />
 
 
 ---
@@ -27,14 +27,16 @@ Painel com totais de férias/folgas, filtros por time e gráficos de capacidade:
 ### 🧭 Hub de Navegação
 Menu centralizado com acesso às principais áreas do sistema:
 
-<img width="2210" height="1147" alt="print_ferias_hub" src="https://github.com/user-attachments/assets/1f55c963-4f1c-427d-9a3b-5fe547e0c2f4" />
+<img width="2210" height="1147" alt="print_ferias_hub" src="https://github.com/user-attachments/assets/ecc394a1-f8b9-4250-a7e5-ce8907f771dc" />
+
 
 ---
 
 ### 📐 Cadastro de Regras Operacionais
 Interface para definir limites e exceções por equipe:
 
-<img width="2210" height="1147" alt="print_ferias_regras" src="https://github.com/user-attachments/assets/14575a3b-cd39-42bb-a2c1-9045ed0a0541" />
+
+<img width="2210" height="1147" alt="print_ferias_regras" src="https://github.com/user-attachments/assets/a7d9d21a-a8a6-4dd8-870d-d4622fec10a2" />
 
 
 ---
