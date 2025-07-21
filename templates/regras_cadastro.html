@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Regras</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">⚙️ Regras</h1>
+
+    <a href="/" class="btn btn-secondary mb-4">🏠 Voltar</a>
+
+    <h3>Adicionar Regra</h3>
+    <form action="/regras-ui" method="post" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label for="tipo" class="form-label">Tipo de Regra</label>
+            <select name="tipo" id="tipo" class="form-select" required onchange="mostrarCamposRegra()">
+                <option value="">Selecione o tipo</option>
+                <option value="Limite por squad">Limite por squad</option>
+                <option value="Limite por time">Limite por time</option>
+                <option value="Incompatibilidade de pessoas">Incompatibilidade de pessoas</option>
+                <option value="Limite por data">Limite por data</option>
+            </select>
+        </div>
+
+        <!-- Campos dinâmicos aqui -->
+        <div id="campos-dinamicos"></div>
+
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-success">Adicionar</button>
+        </div>
+    </form>
+
+    <h3>Lista de Regras</h3>
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in regras %}
+            <tr>
+                <td>{{ r['ID'] }}</td>
+                <td>{{ r['Tipo'] }}</td>
+                <td>{{ r['Descrição'] }}</td>
+                <td>
+                    <a href="/editar-regra/{{r['ID']}}" class="btn btn-warning btn-sm">✏️ Editar</a>
+                    <a href="/remover-regra/{{r['ID']}}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Tem certeza que deseja deletar {{r['Descrição']}}?');">🗑️ Deletar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+function mostrarCamposRegra() {
+    const tipo = document.getElementById('tipo').value;
+    const campos = document.getElementById('campos-dinamicos');
+    campos.innerHTML = '';
+
+    if (tipo === 'Limite por squad') {
+        campos.innerHTML = `
+            <div class="col-md-6">
+                <label class="form-label">Squad</label>
+                <select name="squad" class="form-select" required>
+                    {% for s in squads %}
+                    <option value="{{ s['Nome'] }}">{{ s['Nome'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Máximo de Pessoas</label>
+                <input type="number" name="max_pessoas" class="form-control" required>
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">Descrição</label>
+                <input type="text" name="descricao" class="form-control" required>
+            </div>`;
+    }
+    else if (tipo === 'Limite por time') {
+        campos.innerHTML = `
+            <div class="col-md-6">
+                <label class="form-label">Time</label>
+                <select name="time" class="form-select" required>
+                    {% for t in times %}
+                    <option value="{{ t['Nome'] }}">{{ t['Nome'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Máximo de Pessoas</label>
+                <input type="number" name="max_pessoas" class="form-control" required>
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">Descrição</label>
+                <input type="text" name="descricao" class="form-control" required>
+            </div>`;
+    }
+    else if (tipo === 'Incompatibilidade de pessoas') {
+        campos.innerHTML = `
+            <div class="col-md-12">
+                <label class="form-label">Pessoas (Selecione mais de uma)</label>
+                <select name="pessoas" class="form-select" multiple required>
+                    {% for p in pessoas %}
+                    <option value="{{ p['Nome'] }}">{{ p['Nome'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">Descrição</label>
+                <input type="text" name="descricao" class="form-control" required>
+            </div>`;
+    }
+    else if (tipo === 'Limite por data') {
+        campos.innerHTML = `
+            <div class="col-md-4">
+                <label class="form-label">Data</label>
+                <select name="data" class="form-select" required>
+                    {% for d in datas %}
+                    <option value="{{ d['Data'] }}">{{ d['Data'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Máximo de Pessoas</label>
+                <input type="number" name="max_pessoas" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Mínimo de Pessoas</label>
+                <input type="number" name="min_pessoas" class="form-control" required>
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">Descrição</label>
+                <input type="text" name="descricao" class="form-control" required>
+            </div>`;
+    }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciador de Férias</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+</head>
+<body class="bg-light">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div class="container mt-3">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'warning' if category == 'warning' else 'success' }} alert-dismissible fade show" role="alert">
+            {{ message | safe }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% endwith %}
+
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">🌴 Gerenciador de Férias</h1>
+
+    <a href="/" class="btn btn-secondary mb-4">🏠 Voltar</a>
+
+    <h3>Cadastrar Férias</h3>
+    <form method="POST" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label class="form-label">Pessoa</label>
+            <select name="pessoa" class="form-select" required>
+                <option value="">Selecione a pessoa</option>
+                {% for p in pessoas %}
+                <option value="{{ p['Nome'] }}">{{ p['Nome'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Data de Início</label>
+            <input type="date" name="inicio" class="form-control" required>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Data de Fim</label>
+            <input type="date" name="fim" class="form-control" required>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-select" required>
+                <option value="Solicitado">Solicitado</option>
+                <option value="Aprovado">Aprovado</option>
+                <option value="Recusado">Recusado</option>
+            </select>
+        </div>
+        <div class="col-md-9">
+            <label class="form-label">Observações</label>
+            <input type="text" name="obs" class="form-control" placeholder="Observações">
+        </div>
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-success">Cadastrar</button>
+        </div>
+    </form>
+
+    <h3>Lista de Férias</h3>
+    <form method="GET" class="row g-3 mb-3">
+        <div class="col-md-3">
+            <input type="number" name="ano" class="form-control" value="{{ ano }}" placeholder="Ano (ex: 2025)" required>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">🔍 Filtrar</button>
+        </div>
+    </form>
+
+    <table id="tabelaFerias" class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Pessoa</th>
+                <th>Data de Início</th>
+                <th>Data de Fim</th>
+                <th>Status</th>
+                <th>Observações</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for f in ferias %}
+            <tr>
+                <td>{{ f['ID'] }}</td>
+                <td>{{ f['Pessoa'] }}</td>
+                <td>{{ f['Data Início'] or f['Data de inicio'] }}</td>
+                <td>{{ f['Data Fim'] or f['Data de fim'] }}</td>
+                <td>{{ f['Status'] }}</td>
+                <td>{{ f['Obs'] or f['Observações'] }}</td>
+                <td>
+                    <a href="/editar-ferias/{{f['ID']}}" class="btn btn-warning btn-sm">✏️ Editar</a>
+                    <form action="/remover-ferias/{{f['ID']}}" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza que deseja remover estas férias?');">
+                        <button type="submit" class="btn btn-danger btn-sm">🗑️ Remover</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+$(document).ready(function(){
+    $('#tabelaFerias').DataTable({
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
+        }
+    });
+});
+</script>
+
+</body>
+</html>

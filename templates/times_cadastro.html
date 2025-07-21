@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Times</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">🏢 Times</h1>
+
+    <a href="/" class="btn btn-secondary mb-4">🏠 Voltar</a>
+
+    <h3>Adicionar Time</h3>
+    <form method="POST" class="row g-3 mb-4">
+        <div class="col-md-6">
+            <input type="text" name="nome" class="form-control" placeholder="Nome do Time" required>
+        </div>
+        <div class="col-md-6">
+            <input type="text" name="gestor" class="form-control" placeholder="Gestor" required>
+        </div>
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-success">Adicionar</button>
+        </div>
+    </form>
+
+    <h3>Lista de Times</h3>
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Gestor</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for time in times %}
+            <tr>
+                <td>{{ time['ID'] }}</td>
+                <td>{{ time['Nome'] }}</td>
+                <td>{{ time['Gestor'] }}</td>
+                <td>
+                    <form action="{{ url_for('times.editar_time', id=time['ID']) }}" method="POST" class="d-inline">
+                        <input type="text" name="nome" value="{{ time['Nome'] }}" class="form-control mb-1" required>
+                        <input type="text" name="gestor" value="{{ time['Gestor'] }}" class="form-control mb-1" required>
+                        <button type="submit" class="btn btn-warning btn-sm">✏️ Editar</button>
+                    </form>
+                    <form action="{{ url_for('times.remover_time', id=time['ID']) }}" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza que deseja deletar {{ time['Nome'] }}?');">
+                        <button type="submit" class="btn btn-danger btn-sm">🗑️ Deletar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

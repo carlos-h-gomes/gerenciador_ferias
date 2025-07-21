@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Analítico</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        .day {
+            background: #fff;
+            border: 1px solid #ddd;
+            min-height: 100px;
+            padding: 5px;
+        }
+        .day-header {
+            font-weight: bold;
+            text-align: center;
+            background: #f8f9fa;
+        }
+        .event {
+            font-size: 0.85em;
+            background: #e7f1ff;
+            margin: 2px 0;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">📊 Dashboard Analítico</h1>
+
+    <a href="/" class="btn btn-secondary mb-4">🏠 Voltar</a>
+
+    <h3>Filtros Globais</h3>
+    <form action="/analitica-ui" method="get" class="row g-3 mb-4">
+        <div class="col-md-3">
+            <label class="form-label">Gestor</label>
+            <select name="gestor" class="form-select">
+                <option value="">Todos</option>
+                {% for g in gestores %}
+                <option value="{{ g }}" {% if request.args.get('gestor') == g %}selected{% endif %}>{{ g }}</option>
+                {% endfor %}
+            </select>
+
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Time</label>
+            <select name="time" class="form-select">
+                <option value="">Todos</option>
+                {% for t in times %}
+                <option value="{{ t['Nome'] }}" {% if request.args.get('time') == t['Nome'] %}selected{% endif %}>{{ t['Nome'] }}</option>
+                {% endfor %}
+            </select>
+
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Squad</label>
+            <select name="squad" class="form-select">
+                <option value="">Todos</option>
+                {% for s in squads %}
+                <option value="{{ s['Nome'] }}" {% if request.args.get('squad') == s['Nome'] %}selected{% endif %}>{{ s['Nome'] }}</option>
+                {% endfor %}
+            </select>
+
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Período</label>
+            <input type="month" name="periodo" class="form-control" value="{{ request.args.get('periodo') }}">
+        </div>
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+        </div>
+    </form>
+
+    <h3>Alertas</h3>
+    {% if alertas %}
+    <div class="alert alert-warning">
+        {% for alerta in alertas %}
+        <p>{{ alerta }}</p>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-success">Nenhum alerta no momento.</div>
+    {% endif %}
+
+    <h3>Agenda (Calendário)</h3>
+    {% include 'calendario.html' %}
+
+    <h3>Relatórios</h3>
+    <canvas id="relatorioFerias" height="100"></canvas>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+var ctx = document.getElementById('relatorioFerias').getContext('2d');
+var relatorioFerias = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ meses | safe }},
+        datasets: [{
+            label: 'Qtd. Pessoas de Férias',
+            data: {{ ferias_qtd | safe }},
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+</script>
+
+</body>
+</html>

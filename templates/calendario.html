@@ -1,0 +1,75 @@
+<!-- FullCalendar CSS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.css" rel="stylesheet" />
+
+<div id="calendar-container" class="mb-5">
+  <div id='calendar'></div>
+</div>
+
+<!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/locales-all.global.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+
+      // Obtemos os eventos como variável JS
+      var eventos = {{ agenda_events|tojson }};
+
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'pt-br',
+        height: 'auto',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        buttonText: {
+          today:    'Hoje',
+          month:    'Mês',
+          week:     'Semana',
+          day:      'Dia'
+        },
+        events: eventos,
+        eventDidMount: function(info) {
+          // Filtra todos os eventos do mesmo dia
+          var dataEvento = info.event.startStr;
+          var eventosDoDia = eventos.filter(ev => ev.start === dataEvento);
+
+          // Cria um tooltip com todos os eventos do dia
+          var tooltipText = eventosDoDia.map(ev => ev.title).join("\n");
+
+          // Define no atributo title para tooltip nativo
+          info.el.setAttribute("title", tooltipText);
+        }
+      });
+
+      calendar.render();
+    });
+</script>
+
+
+
+<style>
+    #calendar-container {
+      max-width: 1100px;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative; /* Importante para conter elementos filhos */
+      overflow: hidden; /* Previne vazamentos */
+    }
+
+    #calendar {
+      position: relative; /* Remove qualquer posicionamento absoluto padrão */
+      width: 100%;
+      z-index: 1; /* Mantém na ordem de empilhamento correta */
+    }
+
+    .fc-header-toolbar {
+      margin-bottom: 0.5em !important; /* Reduz espaço do cabeçalho */
+    }
+</style>

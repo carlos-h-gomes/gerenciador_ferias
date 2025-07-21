@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>🏠 Hub Central</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .feature-card {
+            transition: transform 0.1s ease-in-out;
+            height: 100%;
+        }
+        .feature-card:hover {
+            transform: scale(1.02);
+        }
+        .feature-icon {
+            font-size: 2rem;
+        }
+        .card-title {
+            margin-top: 0.5rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">🏠 Gestão de Férias e Feriados</h1>
+
+    <!-- 🔧 Área Operacional -->
+    <div class="mb-4">
+        <h4 class="mb-3">🔧 Área Operacional</h4>
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <a href="{{ url_for('analitica.dashboard_analitica') }}" class="text-decoration-none text-dark">
+                    <div class="card feature-card shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">📊</div>
+                            <h5 class="card-title">Dashboard Geral</h5>
+                            <p class="card-text">Acompanhe férias, feriados e alertas</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+
+            <div class="col-md-4">
+                <a href="{{ url_for('operacao.gerenciador_ferias') }}" class="text-decoration-none text-dark">
+                    <div class="card feature-card shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">🏖️</div>
+                            <h5 class="card-title">Gerenciar Férias</h5>
+                            <p class="card-text">Adicionar, editar ou visualizar férias</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="{{ url_for('operacao.gerenciador_operacao') }}" class="text-decoration-none text-dark">
+                    <div class="card feature-card shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">🌴</div>
+                            <h5 class="card-title">Gerenciar Feriados</h5>
+                            <p class="card-text">Definir e ajustar feriados da equipe</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- ⚙️ Área de Configurações -->
+    <div class="mb-4">
+        <h4 class="mb-3">⚙️ Área de Configurações</h4>
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <a href="{{ url_for('regras.cadastro_regras') }}" class="text-decoration-none text-dark">
+                    <div class="card feature-card shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">⚙️</div>
+                            <h5 class="card-title">Gerenciamento de Regras</h5>
+                            <p class="card-text">Definir e Gerenciar Regras</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="{{ url_for('pessoas.cadastro_pessoas') }}" class="text-decoration-none text-dark">
+                    <div class="card feature-card shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">🧑‍💼</div>
+                            <h5 class="card-title">Cadastro de Pessoas</h5>
+                            <p class="card-text">Gerencie todas as pessoas registradas</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="{{ url_for('squads.cadastro_squads') }}" class="text-decoration-none text-dark">
+                    <div class="card feature-card shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">👥</div>
+                            <h5 class="card-title">Cadastro de Squads</h5>
+                            <p class="card-text">Organize e gerencie squads facilmente</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="{{ url_for('times.cadastro_times') }}" class="text-decoration-none text-dark">
+                    <div class="card feature-card shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">🏢</div>
+                            <h5 class="card-title">Cadastro de Times</h5>
+                            <p class="card-text">Defina times e atribua gestores</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="{{ url_for('datas.cadastro_datas') }}" class="text-decoration-none text-dark">
+                    <div class="card feature-card shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">📅</div>
+                            <h5 class="card-title">Cadastro de Datas</h5>
+                            <p class="card-text">Gerencie feriados e datas especiais</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

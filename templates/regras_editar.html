@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Regra</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">⚙️ Editar Regra</h1>
+
+    <a href="/regras-ui" class="btn btn-secondary mb-4">🔙 Voltar</a>
+
+    <form method="POST" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label class="form-label">Tipo de Regra</label>
+            <input type="text" name="tipo" class="form-control" value="{{ regra['Tipo'] }}" readonly>
+        </div>
+        <div class="col-md-8">
+            <label class="form-label">Descrição</label>
+            <input type="text" name="descricao" class="form-control" value="{{ regra['Descrição'] }}" required>
+        </div>
+
+        {% set params = regra['Parametros_dict'] %}
+
+        {% if regra['Tipo'] == 'Limite por squad' %}
+        <div class="col-md-6">
+            <label class="form-label">Squad</label>
+            <select name="squad" class="form-select" required>
+                {% for s in squads %}
+                <option value="{{ s['Nome'] }}" {% if params.get('squad') == s['Nome'] %}selected{% endif %}>{{ s['Nome'] }}</option>
+
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Máximo de Pessoas</label>
+            <input type="number" name="max_pessoas" value="{{ params.get('max_pessoas', '') }}" class="form-control" required>
+
+        </div>
+        {% endif %}
+
+        {% if regra['Tipo'] == 'Limite por time' %}
+        <div class="col-md-6">
+            <label class="form-label">Time</label>
+            <select name="time" class="form-select" required>
+                {% for t in times %}
+                <option value="{{ t['Nome'] }}" {% if params['time'] == t['Nome'] %}selected{% endif %}>{{ t['Nome'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Máximo de Pessoas</label>
+            <input type="number" name="max_pessoas" value="{{ params.get('max_pessoas', '') }}" class="form-control" required>
+
+        </div>
+        {% endif %}
+
+        {% if regra['Tipo'] == 'Incompatibilidade de pessoas' %}
+        <div class="col-md-12">
+            <label class="form-label">Pessoas</label>
+            <select name="pessoas" class="form-select" multiple required>
+                {% for p in pessoas %}
+                <option value="{{ p['Nome'] }}" {% if p['Nome'] in params['pessoas'] %}selected{% endif %}>{{ p['Nome'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% endif %}
+
+        {% if regra['Tipo'] == 'Limite por data' %}
+        <div class="col-md-4">
+            <label class="form-label">Data</label>
+            <select name="data" class="form-select" required>
+                {% for d in datas %}
+                <option value="{{ d['Data'] }}" {% if params['data'] == d['Data'] %}selected{% endif %}>{{ d['Data'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Máximo de Pessoas</label>
+            <input type="number" name="max_pessoas" value="{{ params['max_pessoas'] }}" class="form-control" required>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Mínimo de Pessoas</label>
+            <input type="number" name="min_pessoas" value="{{ params['min_pessoas'] }}" class="form-control" required>
+        </div>
+        {% endif %}
+
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-warning">Salvar Alterações</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

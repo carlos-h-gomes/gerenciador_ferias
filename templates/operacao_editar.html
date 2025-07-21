@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Operação</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">🛠️ Editar Operação</h1>
+
+    <a href="/operacao-ui" class="btn btn-secondary mb-4">🔙 Voltar</a>
+
+    <form method="POST" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label class="form-label">Data</label>
+            <input type="date" name="data" class="form-control" value="{{ operacao['Data_iso'] }}" required>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Descrição</label>
+            <input type="text" name="descricao" class="form-control" value="{{ operacao['Descrição'] }}" required>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Quem Trabalha</label>
+            <select name="pessoas" class="form-select" multiple required id="select-pessoas">
+                {% for p in pessoas %}
+                <option value="{{ p['Nome'] }}" {% if p['Nome'] in operacao['Quem Trabalha'] %}selected{% endif %}>{{ p['Nome'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- 🔧 Campos de horário e squad para pessoas selecionadas -->
+        <div id="detalhes-pessoas">
+        {% for p in pessoas %}
+        {% if p['Nome'] in operacao['Quem Trabalha'] %}
+        <div class="col-md-3">
+            <label class="form-label">Horário - {{ p['Nome'] }}</label>
+            <input type="time" name="horario_{{p['Nome']}}" class="form-control" value="{{ horarios[p['Nome']] }}">
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Squad - {{ p['Nome'] }}</label>
+            <select name="squad_{{p['Nome']}}" class="form-select">
+                <option value="">Selecione o squad</option>
+                {% for s in squads %}
+                <option value="{{ s['Nome'] }}" {% if squads_pessoa[p['Nome']] == s['Nome'] %}selected{% endif %}>{{ s['Nome'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% endif %}
+        {% endfor %}
+        </div>
+
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-warning">Salvar Alterações</button>
+        </div>
+    </form>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $('#select-pessoas').change(function(){
+            var selecionados = $(this).val();
+            var html = $('#detalhes-pessoas').html(); // mantém campos existentes
+
+            if(selecionados){
+                selecionados.forEach(function(pessoa){
+                    // Verifica se já existe o campo de horário dessa pessoa antes de criar
+                    if($('#detalhes-pessoas').find('input[name="horario_'+pessoa+'"]').length == 0){
+                        html += '<div class="col-md-3">';
+                        html += '<label class="form-label">Horário - '+pessoa+'</label>';
+                        html += '<input type="time" name="horario_'+pessoa+'" class="form-control">';
+                        html += '</div>';
+
+                        html += '<div class="col-md-3">';
+                        html += '<label class="form-label">Squad - '+pessoa+'</label>';
+                        html += '<select name="squad_'+pessoa+'" class="form-select">';
+                        html += '<option value="">Selecione o squad</option>';
+                        {% for s in squads %}
+                        html += '<option value="{{ s["Nome"] }}">{{ s["Nome"] }}</option>';
+                        {% endfor %}
+                        html += '</select>';
+                        html += '</div>';
+                    }
+                });
+            }
+            $('#detalhes-pessoas').html(html);
+        });
+    });
+
+</script>
+
+</body>
+</html>
